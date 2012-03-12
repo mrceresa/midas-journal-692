@@ -82,7 +82,7 @@ FastBilateralImageFilter<TInputImage, TOutputImage>
   this->AllocateOutputs();
   InputImageConstPointer input = this->GetInput();
   OutputImagePointer output = this->GetOutput();
-  
+    
   // Array to store domain sigmas, used during down-sampling and reconstruction
   DomainSigmaArrayType  domainSigmaInPixels;
   
@@ -268,7 +268,7 @@ FastBilateralImageFilter<TInputImage, TOutputImage>
   OutputImageIteratorType     iterOutputImage
     (output, output->GetRequestedRegion());
   InputImageConstIteratorType iterInputImage
-    (input, output->GetRequestedRegion());
+    (input, input->GetRequestedRegion());
 
   InterpolatedIndexType gridIndices;
   int i;
@@ -277,6 +277,8 @@ FastBilateralImageFilter<TInputImage, TOutputImage>
   InputImageIndexType index;
   typename InterpolatorType::Pointer interpolator = InterpolatorType::New();
   interpolator->SetInputImage(gridImageOut);
+
+
 
   for ( iterOutputImage.GoToBegin(), iterInputImage.GoToBegin();
         !iterOutputImage.IsAtEnd();  ++iterOutputImage, ++iterInputImage)
@@ -293,13 +295,19 @@ FastBilateralImageFilter<TInputImage, TOutputImage>
     
     gridIndices[itkGetStaticConstMacro(ImageDimension)] =
       intensityDelta / m_RangeSigma + padding;
+      
+    iterOutputImage.Set( interpolator->EvaluateAtContinuousIndex(gridIndices));
+      
     
     iterOutputImage.Set( static_cast<OutputPixelType>
       (interpolator->EvaluateAtContinuousIndex(gridIndices))
     );
     
+
     }
   }
+  
+
 }
 
 template< class TInputImage, class TOutputImage >

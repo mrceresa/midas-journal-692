@@ -1,11 +1,11 @@
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
-#include <fstream>
+
 #include "itkFastBilateralImageFilter.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-#include "itkImageRegionIterator.h"
+
 
 /**
  * This test was originally taken from the tests for the itkBilateralImageFilter
@@ -20,7 +20,7 @@ int main(int ac, char* av[] )
     }
 
   typedef unsigned char PixelType;
-  const unsigned int dimension = 2;
+  const unsigned int dimension = 3;
   typedef itk::Image<PixelType, dimension> myImage;
   itk::ImageFileReader<myImage>::Pointer input 
     = itk::ImageFileReader<myImage>::New();
@@ -38,18 +38,6 @@ int main(int ac, char* av[] )
   filter->SetDomainSigma( 4.0 );
   filter->SetRangeSigma( 50.0 );
   
-  
-  // Test itkSetVectorMacro
-  double domainSigma[dimension];
-  for (unsigned int i = 0; i < dimension; i++)
-    {
-      domainSigma[i] = 4.0;
-    }
-  filter->SetDomainSigma(domainSigma);
-
-  // Test itkGetMacro
-  std::cout << "filter->GetDomainSigma(): " << filter->GetDomainSigma() << std::endl;
-  std::cout << "filter->GetRangeSigma(): " << filter->GetRangeSigma() << std::endl;
   
   try
     {
